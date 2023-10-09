@@ -7,7 +7,7 @@ def cosinedistance():
 def euclideandistance():
   print('Distancia Euclidea')
 
-def metricsMenu(m):
+def metrics_menu(m):
   op=1
   metrics = ['Correlación de Pearson', 'Distancia Coseno', 'Distancia Euclidea'] #Lista de opciones
   print('Tipo de métrica\n1.Correlación de Pearson\n2.Distancia Coseno\n3.Distancia Euclidea\n4.Salir') #Muestra las opciones
@@ -26,4 +26,4 @@ def metricsMenu(m):
 
 if __name__ == '__main__':
   m = ""
-  metricsMenu(m)
+  metrics_menu(m)

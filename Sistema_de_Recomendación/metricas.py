@@ -3,7 +3,7 @@ import numpy as np
 def pearson(r1, r2):
   return np.corrcoef(r1, r2)[0, 1]
 
-def cosinedistance(r1, r2):
+def cosine_distance(r1, r2):
   producto_escalar = np.dot(r1, r2)
 
   norma_a = np.linalg.norm(r1)
@@ -11,7 +11,7 @@ def cosinedistance(r1, r2):
 
   return producto_escalar / (norma_a * norma_b)
 
-def euclideandistance(r1, r2):
+def euclidean_distance(r1, r2):
   distancia = np.linalg.norm(r2 - r1)
 
   return 1/distancia
@@ -30,10 +30,10 @@ if __name__ == '__main__':
 
   print(f"Correlacion de Pearson entre {user1} y {user2} =", pearson(user1, user2))
 
-  print(f"Distancia del coseno entre {user1} y {user2}  =", cosinedistance(user1, user2))
+  print(f"Distancia del coseno entre {user1} y {user2}  =", cosine_distance(user1, user2))
 
-  print(f"Distancia euclidiana entre {user1} y {user2}  =", euclideandistance(user1, user2))
+  print(f"Distancia euclidiana entre {user1} y {user2}  =", euclidean_distance(user1, user2))
 
-
+  np.mean([pearson(user1, user2), pearson(user1, user3), pearson(user1, user4)])
 
 

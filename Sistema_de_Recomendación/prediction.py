@@ -1,6 +1,6 @@
 import numpy as np
 
-def simplePrediction():
+def simple_prediction():
   print('Predicción simple')
 
 
