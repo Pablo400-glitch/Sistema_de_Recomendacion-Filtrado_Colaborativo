@@ -10,7 +10,7 @@ def format_data(data):
 
   new_matrix = [[row[i] for i in range(len(row)) if i != column_to_remove] for row in data]
 
-  return new_matrix
+  return [new_matrix, column_to_remove]
 
 def get_correlations(data, metric):
   correlations = []
@@ -18,11 +18,11 @@ def get_correlations(data, metric):
 
   for i in range(len(data)):
     if metric == 'Correlacion de Pearson':
-      correlations.append([pearson(data[0], data[i]), "Usuario " + str(i + 1)])
+      correlations.append([pearson(np.array(data[0]), np.array(data[i])), int(i)])
     elif metric == 'Distancia Coseno':
-      correlations.append([cosine_distance(data[0], data[i]), "Usuario " + str(i + 1)])
+      correlations.append([cosine_distance(np.array(data[0]), np.array(data[i])), int(i)])
     elif metric == 'Distancia Euclidea':
-      correlations.append([euclidean_distance(data[0], data[i]), "Usuario " + str(i + 1)])
+        correlations.append([euclidean_distance(np.array(data[0]), np.array(data[i])), int(i)])
 
   for item in correlations:
     if item[0] != 1.0:
@@ -30,7 +30,35 @@ def get_correlations(data, metric):
 
   return sorted(new_correlations, reverse=True)
 
-#def simplePrediction(num_neighbors):
+def simple_prediction(original_matrix, stripe, correlations, num_neighbors):
+  sum_num = 0
+  sum_denom = 0
+  correlations = correlations[:num_neighbors]
+
+  for corr in correlations:
+    sum_num += corr[0] * original_matrix[corr[1]][stripe]
+  
+  for corr in correlations:
+    sum_denom += corr[0]
+
+  return sum_num / sum_denom
+
+def mean_difference(original_matrix, formatted_matrix, stripe, correlations, num_neighbors):
+  sum_num = 0
+  sum_denom = 0
+  correlations = correlations[:num_neighbors]
+
+  for i in range(len(original_matrix)):
+    if original_matrix[i][stripe] == "-":
+      stripe_pos = original_matrix[i][stripe].index("-")
+
+  for corr in correlations:
+    sum_num += corr[0] * (original_matrix[corr[1]][stripe] - np.mean(original_matrix[corr[1]]))
+
+  for corr in correlations:
+    sum_denom += corr[0]
+
+  return np.mean(formatted_matrix[0][stripe_pos]) + (sum_num / sum_denom)
 
 if __name__ == '__main__':
   matrix = [[5, 3, 4, 4, "-"],
@@ -39,4 +67,6 @@ if __name__ == '__main__':
             [3, 3, 1, 5, 4],
             [1, 5, 5, 2, 1]]
 
-  print(get_correlations(format_data(matrix), 'Correlacion de Pearson'))
+  #print(get_correlations(format_data(matrix)[0], 'Correlacion de Pearson'))
+  #print(simple_prediction(matrix, format_data(matrix)[1],get_correlations(format_data(matrix)[0], 'Correlacion de Pearson'), 2))
+  print(mean_difference(matrix, format_data(matrix), format_data(matrix)[1],get_correlations(format_data(matrix)[0], 'Correlacion de Pearson'), 2))

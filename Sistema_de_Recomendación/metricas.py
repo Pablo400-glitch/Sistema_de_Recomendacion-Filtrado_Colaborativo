@@ -14,7 +14,10 @@ def cosine_distance(r1, r2):
 def euclidean_distance(r1, r2):
   distancia = np.linalg.norm(r2 - r1)
 
-  return 1/distancia
+  if (distancia == 0):
+    return 0
+
+  return 1 / distancia
 
 if __name__ == '__main__':
   matrix = [[5, 3, 4, 4, "-"],
