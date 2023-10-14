@@ -1,16 +1,6 @@
 import numpy as np
 from metricas import pearson, cosine_distance, euclidean_distance
-
-def format_data(data):
-  column_to_remove = None
-  for column in range(len(data[0])):
-      if any(row[column] == "-" for row in data):
-          column_to_remove = column
-          break
-
-  new_matrix = [[row[i] for i in range(len(row)) if i != column_to_remove] for row in data]
-
-  return [new_matrix, column_to_remove]
+from utilities import are_close, format_data
 
 def get_correlations(data, metric):
   correlations = []
@@ -22,21 +12,37 @@ def get_correlations(data, metric):
     elif metric == 'Distancia Coseno':
       correlations.append([cosine_distance(np.array(data[0]), np.array(data[i])), int(i)])
     elif metric == 'Distancia Euclidea':
-        correlations.append([euclidean_distance(np.array(data[0]), np.array(data[i])), int(i)])
+      correlations.append([euclidean_distance(np.array(data[0]), np.array(data[i])), int(i)])
 
-  for item in correlations:
-    if item[0] != 1.0:
+  if metric == 'Correlacion de Pearson':
+    for item in correlations:
+      if item[0] != 1.0:
         new_correlations.append(item)
+    new_correlations = sorted(new_correlations, reverse=True)
+  elif metric == 'Distancia Coseno':
+    for item in correlations:
+      if are_close(item[0], 1.0) == False:
+        new_correlations.append(item)
+      new_correlations = sorted(new_correlations, reverse=True)
+  elif metric == 'Distancia Euclidea':
+    for item in correlations:
+      if item[0] != 0.0:
+        new_correlations.append(item)
+    new_correlations = sorted(new_correlations, reverse=False)
 
-  return sorted(new_correlations, reverse=True)
+  return new_correlations
 
 def simple_prediction(original_matrix, stripe, correlations, num_neighbors):
   sum_num = 0
   sum_denom = 0
   correlations = correlations[:num_neighbors]
 
+  # Arreglar esto
   for corr in correlations:
-    sum_num += corr[0] * original_matrix[corr[1]][stripe]
+    if (original_matrix[corr[1]][stripe] == "-"):
+      continue
+    else:
+      sum_num += corr[0] * original_matrix[corr[1]][stripe]
   
   for corr in correlations:
     sum_denom += corr[0]
@@ -52,8 +58,12 @@ def mean_difference(original_matrix, formatted_matrix, stripe, correlations, num
     if original_matrix[i][stripe] == "-":
       stripe_pos = original_matrix[i][stripe].index("-")
 
+  # Arreglar esto
   for corr in correlations:
-    sum_num += corr[0] * (original_matrix[corr[1]][stripe] - np.mean(original_matrix[corr[1]]))
+    if (original_matrix[corr[1]][stripe] == "-"):
+      continue
+    else:
+      sum_num += corr[0] * (original_matrix[corr[1]][stripe] - np.mean(original_matrix[corr[1]]))
 
   for corr in correlations:
     sum_denom += corr[0]
@@ -67,6 +77,11 @@ if __name__ == '__main__':
             [3, 3, 1, 5, 4],
             [1, 5, 5, 2, 1]]
 
-  #print(get_correlations(format_data(matrix)[0], 'Correlacion de Pearson'))
-  #print(simple_prediction(matrix, format_data(matrix)[1],get_correlations(format_data(matrix)[0], 'Correlacion de Pearson'), 2))
-  print(mean_difference(matrix, format_data(matrix), format_data(matrix)[1],get_correlations(format_data(matrix)[0], 'Correlacion de Pearson'), 2))
+  print(get_correlations(format_data(matrix)[0], 'Correlacion de Pearson'))
+  print(get_correlations(format_data(matrix)[0], 'Distancia Coseno'))
+  print(get_correlations(format_data(matrix)[0], 'Distancia Euclidea'))
+  print(simple_prediction(matrix, format_data(matrix)[1],get_correlations(format_data(matrix)[0], 'Correlacion de Pearson'), 2))
+  print(simple_prediction(matrix, format_data(matrix)[1],get_correlations(format_data(matrix)[0], 'Distancia Coseno'), 2))
+  print(simple_prediction(matrix, format_data(matrix)[1],get_correlations(format_data(matrix)[0], 'Distancia Euclidea'), 2))
+  #print(get_correlations(format_data(matrix)[0], 'Correlacion de Pearson'));
+  #print(mean_difference(matrix, format_data(matrix), format_data(matrix)[1],get_correlations(format_data(matrix)[0], 'Correlacion de Pearson'), 2))
