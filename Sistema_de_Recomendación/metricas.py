@@ -19,24 +19,4 @@ def euclidean_distance(r1, r2):
 
   return 1 / distancia
 
-if __name__ == '__main__':
-  matrix = [[5, 3, 4, 4, "-"],
-            [3, 1, 2, 3, 3],
-            [4, 3, 4, 3, 5],
-            [3, 3, 1, 5, 4],
-            [1, 5, 5, 2, 1]]
-
-  user1 = np.array(matrix[0][:-1])
-  user2 = np.array(matrix[1][:-1])
-  user3 = np.array(matrix[2][:-1])
-  user4 = np.array(matrix[3][:-1])
-
-  print(f"Correlacion de Pearson entre {user1} y {user2} =", pearson(user1, user2))
-
-  print(f"Distancia del coseno entre {user1} y {user2}  =", cosine_distance(user1, user2))
-
-  print(f"Distancia euclidiana entre {user1} y {user2}  =", euclidean_distance(user1, user2))
-
-  np.mean([pearson(user1, user2), pearson(user1, user3), pearson(user1, user4)])
-
 
