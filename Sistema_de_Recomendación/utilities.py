@@ -60,10 +60,34 @@ def find_dash(matrix):
             return row
     return None
 
-def check_rate(rate, max, min):
-    if (rate > float(max)):
-        return max
-    elif (rate < float(min)):
-        return min
-    else:
-        return rate
+# Normalizar la matriz al rango 0-1
+def normalize_matrix(matrix):
+    min_original = np.min(matrix)
+    max_original = np.max(matrix)
+    normalized_matrix = (matrix - min_original) / (max_original - min_original)
+    
+    return normalized_matrix
+
+def denormalize_matrix(normalized_matrix, min_original, max_original):
+    # Desnormalizar la matriz al rango especificado
+    denormalized_matrix = (normalized_matrix * (max_original - min_original)) + min_original
+    
+    return denormalized_matrix
+
+def read_file(file_name):
+  límite_inferior = None
+  límite_superior = None
+  data = []
+
+  file = open(file_name, "r")
+  with file as archivo:
+    límite_inferior = archivo.readline().strip()
+    límite_superior = archivo.readline().strip()
+
+    for linea in archivo:
+      elementos = linea.split()
+      elementos = [float(e) if e != '-' else "-" for e in elementos]
+      data.append(elementos)
+
+  return data
+
