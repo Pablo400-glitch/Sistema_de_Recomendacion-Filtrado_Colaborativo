@@ -27,16 +27,16 @@ if __name__ == '__main__':
   for i in range(len(get_correlations(format_data(data)[0], data, 'Distancia Euclidea'))):
     print(get_correlations(format_data(data)[0], data, 'Distancia Euclidea')[i])
 
-  for i in range(len(format_data(data)[1])):
-    simple_prediction(data, format_data(data)[1],get_correlations(format_data(data)[0], data, 'Correlacion de Pearson'), 2)
+  #for i in range(len(format_data(data)[1])):
+  #  simple_prediction(data, format_data(data)[1],get_correlations(format_data(data)[0], data, 'Correlacion de Pearson'), 2)
   
-  print('\nMatrix con predicciones simples')
+  #print('\nMatrix con predicciones simples')
+  #for row in data:
+  #  print(row)
+
+  for i in range(len(format_data(data)[1])):
+    mean_difference(data, format_data(data)[0], format_data(data)[1], get_correlations(format_data(data)[0], data, 'Correlacion de Pearson'), 2)
+
+  print('\nMatrix con predicciones por diferencia de medias')
   for row in data:
     print(row)
-
-  #for i in range(len(format_data(data)[1])):
-  #  mean_difference(data, format_data(data)[0], format_data(data)[1], get_correlations(format_data(data)[0], data, 'Correlacion de Pearson'), 2)
-
-  #print('\nMatrix con predicciones por diferencia de medias')
-  #for row in data:
-    #print(row)

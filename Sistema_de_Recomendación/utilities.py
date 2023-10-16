@@ -1,5 +1,5 @@
 import numpy as np
-from metricas import pearson, cosine_distance, euclidean_distance
+from metrics import pearson, cosine_distance, euclidean_distance
 
 def format_data(data):
   rows_to_remove = []
