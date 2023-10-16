@@ -1,5 +1,5 @@
 import numpy as np
-from utilities import find_dash
+from utilities import find_dash, get_correlations
 
 def simple_prediction(original_matrix, dash, correlations, num_neighbors):
   sum_num = 0
@@ -8,6 +8,7 @@ def simple_prediction(original_matrix, dash, correlations, num_neighbors):
 
   dash_row = find_dash(original_matrix)
 
+  # Arreglar esto
   for corr in correlations:
     if (original_matrix[corr[1]][dash[0]] == "-"):
       continue
@@ -19,7 +20,7 @@ def simple_prediction(original_matrix, dash, correlations, num_neighbors):
 
   original_matrix[dash_row][dash[0]] = round((sum_num / sum_denom), 4);
 
-  return sum_num / sum_denom
+  return original_matrix[dash_row][dash[0]]
 
 def mean_difference(original_matrix, formatted_matrix, dash, correlations, num_neighbors):
   sum_num = 0

@@ -89,5 +89,5 @@ def read_file(file_name):
       elementos = [float(e) if e != '-' else "-" for e in elementos]
       data.append(elementos)
 
-  return data
+  return límite_inferior, límite_superior, data
 

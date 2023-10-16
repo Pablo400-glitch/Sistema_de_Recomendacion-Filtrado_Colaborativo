@@ -1,19 +1,16 @@
 import numpy as np
-import argparse
+import sys
 from prediction import simple_prediction, mean_difference
 from utilities import format_data, get_correlations, normalize_matrix, denormalize_matrix, read_file
 
 if __name__ == '__main__':
-  parser = argparse.ArgumentParser()
-  parser.add_argument("file_name", help="Nombre del archivo a leer")
-  args = parser.parse_args() 
-  file = args.file_name
+  file = sys.argv[1]
 
-  límite_inferior = None
-  límite_superior = None
+  límite_inferior = 0.000
+  límite_superior = 0.000
   data = []
 
-  data = read_file(file)
+  límite_inferior, límite_superior, data = read_file(file)
 
   '''
   print("Correlacion de Pearson")
@@ -29,11 +26,11 @@ if __name__ == '__main__':
   '''
   #for i in range(len(format_data(data)[1])):
   #  simple_prediction(data, format_data(data)[1],get_correlations(format_data(data)[0], data, 'Correlacion de Pearson'), 2)
-  
+
   for i in range(len(format_data(data)[1])):
     mean_difference(data, format_data(data)[0], format_data(data)[1], get_correlations(format_data(data)[0], data, 'Correlacion de Pearson'), 3)
 
-  data = denormalize_matrix(normalize_matrix(data), 0, 5)
+  data = denormalize_matrix(normalize_matrix(data), float(límite_inferior), float(límite_superior))
   
   for row in data:
     formatted_row = [round(value, 4) for value in row]

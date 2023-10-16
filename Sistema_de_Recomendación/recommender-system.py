@@ -1,29 +1,45 @@
-def pearson():
-  print('Correlación de Pearson')
+import sys
+from utilities import format_data, get_correlations, normalize_matrix, denormalize_matrix, read_file
+from prediction import simple_prediction, mean_difference
+from menus import metrics_menu, predictions_menu, neighbours_menu
 
-def cosinedistance():
-  print('Distancia Coseno')
-
-def euclideandistance():
-  print('Distancia Euclidea')
-
-def metrics_menu(m):
-  op=1
-  metrics = ['Correlación de Pearson', 'Distancia Coseno', 'Distancia Euclidea'] #Lista de opciones
-  print('Tipo de métrica\n1.Correlación de Pearson\n2.Distancia Coseno\n3.Distancia Euclidea\n4.Salir') #Muestra las opciones
-  op = int(input('Ingresa una opcion: ')) # Usuario ingresa opcion
-      
-  if op == 1:
-    m = metrics[0]
-  elif op == 2:
-    m = metrics[1]
-  elif op == 3:
-    m = metrics[2]
-  elif op == 4:
-    print('Saliendo...')
-  else:
-    print('Ingrese una opcion valida') 
+def display_help():
+    print("Uso: example.py archivo.txt")
+    print("Descripción: Este programa es un sistema recomendador que utiliza métricas para predecir la valoración de un usuario.")
+    print("Argumentos:")
+    print("  archivo.txt: El archivo que contiene los datos de entrada para el sistema recomendador.")  
 
 if __name__ == '__main__':
-  m = ""
-  metrics_menu(m)
+  if len(sys.argv) == 2 and sys.argv[1] == "--help":
+    display_help()
+    sys.exit(0)
+  elif len(sys.argv) != 2:
+    print("Error: Uso incorrecto. Ejecuta 'example.py --help' para obtener ayuda.")
+    sys.exit(1)
+
+  file = sys.argv[1]
+
+  límite_inferior, límite_superior, data = read_file(file)
+
+  metrica = metrics_menu()
+
+  prediction = predictions_menu()
+
+  num_neighbours = neighbours_menu(len(data))
+
+  for i in range(len(format_data(data)[1])):
+    if prediction == 'Predicción simple':
+      simple_prediction(data, format_data(data)[1], get_correlations(format_data(data)[0], data, metrica), num_neighbours)
+    elif prediction == 'Diferencia con la media':
+      mean_difference(data, format_data(data)[0], format_data(data)[1], get_correlations(format_data(data)[0], data, 'Correlacion de Pearson'), num_neighbours)
+
+  data = denormalize_matrix(normalize_matrix(data), float(límite_inferior), float(límite_superior))
+
+  print('\nMatriz de valoraciones: \n')
+  for row in data:
+    formatted_row = [round(value, 4) for value in row]
+    print(formatted_row)
+
+
+
+
