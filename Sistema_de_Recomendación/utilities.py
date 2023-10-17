@@ -2,10 +2,12 @@ import numpy as np
 from metrics import pearson, cosine_distance, euclidean_distance
 
 def format_data(data):
-  rows_to_remove = []
+  rows_to_remove = list()
+  row_position = list()
 
   for row in data:
     if "-" in row:
+      row_position.append(data.index(row))
       rows_to_remove.append(row)
 
   # Encuentra las columnas a eliminar
@@ -17,7 +19,7 @@ def format_data(data):
 
   new_matrix = [[row[i] for i in range(len(row)) if i not in columns_to_remove] for row in data]
 
-  return [new_matrix, columns_to_remove]
+  return [new_matrix, columns_to_remove, row_position]
 
 def get_correlations(data, original_matrix, metric):
   correlations = []
@@ -54,23 +56,23 @@ def get_correlations(data, original_matrix, metric):
 
   return new_correlations
 
-def find_dash(matrix):
-    for row, row_values in enumerate(matrix):
+def find_dash(data):
+    for row, row_values in enumerate(data):
         if "-" in row_values:
             return row
     return None
 
 # Normalizar la matriz al rango 0-1
-def normalize_matrix(matrix):
-    min_original = np.min(matrix)
-    max_original = np.max(matrix)
-    normalized_matrix = (matrix - min_original) / (max_original - min_original)
+def normalize_data(data):
+    min_original = np.min(data)
+    max_original = np.max(data)
+    normalized_data = (data - min_original) / (max_original - min_original)
     
-    return normalized_matrix
+    return normalized_data
 
-def denormalize_matrix(normalized_matrix, min_original, max_original):
+def denormalize_matrix(normalized_data, min_original, max_original):
     # Desnormalizar la matriz al rango especificado
-    denormalized_matrix = (normalized_matrix * (max_original - min_original)) + min_original
+    denormalized_matrix = (normalized_data * (max_original - min_original)) + min_original
     
     return denormalized_matrix
 
@@ -91,3 +93,21 @@ def read_file(file_name):
 
   return límite_inferior, límite_superior, data
 
+def normalize_denormalize_and_round(data, decimal_places, límite_inferior, límite_superior):
+  # Se normaliza y desnormaliza la matriz de valoraciones para que los valores estén entre los límites especificados
+  data = denormalize_matrix(normalize_data(data), límite_inferior, límite_superior)
+  for i in range(len(data)):
+      for j in range(len(data[i])):
+          data[i][j] = round(data[i][j], decimal_places)
+
+  return data
+
+def restore_data(original_data, normalized_data, dash_row_original, dash_column_original):
+  values = []
+  for row in range(len(dash_row_original)):
+    for column in range(len(dash_column_original)):
+      if (original_data[dash_row_original[row]][dash_column_original[column]] == "-"):
+        original_data[dash_row_original[row]][dash_column_original[column]] =  normalized_data[dash_row_original[row]][dash_column_original[column]]
+        values.append([dash_row_original[row] + 1, dash_column_original[column] + 1, original_data[dash_row_original[row]][dash_column_original[column]]])
+        
+  return values
