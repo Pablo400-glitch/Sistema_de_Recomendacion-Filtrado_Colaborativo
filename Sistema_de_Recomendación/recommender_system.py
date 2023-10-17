@@ -8,7 +8,7 @@ from menus import metrics_menu, predictions_menu, neighbours_menu
 
 def display_help():
     print(colored("\nUso:","green"))
-    print(colored(" example.py archivo.txt","blue"))
+    print(colored(" recommender_system.py archivo.txt","blue"))
     print(colored("Descripción:","green"))
     print(colored(" Este programa es un sistema recomendador que utiliza métricas para predecir la valoración de un usuario.","blue"))
     print(colored("Argumentos:","green"))
