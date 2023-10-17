@@ -11,7 +11,7 @@ def display_help():
     print("Argumentos:")
     print("  archivo.txt: El archivo que contiene los datos de entrada para el sistema recomendador.")  
 
-def normalize_and_round(data, decimal_places):
+def normalize_denormalize_and_round(data, decimal_places):
   # Se normaliza y desnormaliza la matriz de valoraciones para que los valores estén entre los límites especificados
   data = denormalize_matrix(normalize_matrix(data), float(límite_inferior), float(límite_superior))
   for i in range(len(data)):
@@ -32,6 +32,9 @@ if __name__ == '__main__':
 
   límite_inferior, límite_superior, data = read_file(file)
 
+  print('\nMatriz de valoraciones')
+  print(colored(tabulate(data, tablefmt='fancy_grid'),'yellow'))
+
   metrica = metrics_menu()
 
   prediction = predictions_menu()
@@ -47,7 +50,7 @@ if __name__ == '__main__':
 
   print('\nMatriz de valoraciones')
 
-  data = normalize_and_round(data, 2)
+  data = normalize_denormalize_and_round(data, 2)
 
   print(colored(tabulate(data, tablefmt='fancy_grid'),'green'))
 
