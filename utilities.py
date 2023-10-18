@@ -21,7 +21,7 @@ def format_data(data):
 
   return [new_matrix, columns_to_remove, row_position]
 
-def get_correlations(data, original_matrix, metric):
+def get_correlations(data, original_matrix, metric, num_neighbors):
   correlations = []
   new_correlations = []
 
@@ -34,25 +34,27 @@ def get_correlations(data, original_matrix, metric):
     if (dash_row == i):
       continue
     else:
+      if len(correlations) == num_neighbors - 1:
+        break
       if metric == 'Correlacion de Pearson':
-          correlations.append([pearson(np.array(data[dash_row]), np.array(data[i])), int(i)])
+          correlations.append([int(i), pearson(np.array(data[dash_row]), np.array(data[i]))])
       elif metric == 'Distancia Coseno':
-          correlations.append([cosine_distance(np.array(data[dash_row]), np.array(data[i])), int(i)])
+          correlations.append([int(i), cosine_distance(np.array(data[dash_row]), np.array(data[i]))])
       elif metric == 'Distancia Euclidea':
-        correlations.append([euclidean_distance(np.array(data[dash_row]), np.array(data[i])), int(i)])
+        correlations.append([int(i), euclidean_distance(np.array(data[dash_row]), np.array(data[i]))])
 
   if metric == 'Correlacion de Pearson':
     for item in correlations:
-      if item[0] != 1.0:
-        new_correlations.append(item)
-    new_correlations = sorted(new_correlations, reverse=True)
-  elif metric == 'Distancia Coseno':
-    new_correlations = sorted(correlations, reverse=True)
-  elif metric == 'Distancia Euclidea':
-    for item in correlations:
-      if item[0] != 0.0:
+      if item[1] != 1.0:
         new_correlations.append(item)
     new_correlations = sorted(new_correlations, reverse=False)
+  elif metric == 'Distancia Coseno':
+    new_correlations = sorted(correlations, reverse=False)
+  elif metric == 'Distancia Euclidea':
+    for item in correlations:
+      if item[1] != 0.0:
+        new_correlations.append(item)
+    new_correlations = sorted(new_correlations, reverse=True)
 
   return new_correlations
 
