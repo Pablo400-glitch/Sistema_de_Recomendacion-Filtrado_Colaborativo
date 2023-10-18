@@ -73,7 +73,6 @@ def normalize_data(data):
     return normalized_data
 
 def denormalize_matrix(normalized_data, min_original, max_original):
-    # Desnormalizar la matriz al rango especificado
     denormalized_matrix = (normalized_data * (max_original - min_original)) + min_original
     
     return denormalized_matrix
