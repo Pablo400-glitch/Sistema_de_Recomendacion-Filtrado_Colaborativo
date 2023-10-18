@@ -4,7 +4,6 @@ from termcolor import colored
 import copy
 from utilities import format_data, get_correlations, read_file, normalize_denormalize_and_round, restore_data
 from prediction import simple_prediction, mean_difference
-from menus import metrics_menu, predictions_menu, neighbours_menu
 
 def display_help():
     print(colored("Uso:", "green"))
