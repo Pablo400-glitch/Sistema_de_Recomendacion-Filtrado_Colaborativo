@@ -85,7 +85,7 @@ if __name__ == '__main__':
     dash_row = format_data(data)[2]
     correlations = get_correlations(formatted_data, dash_row, metric, num_neighbours)
     
-    print('\nCorrelaciones - Usuario ' + str(format_data(data)[2][0]) + ' - Película ' + str(dash_column[0]))
+    print('\n' + metric +' - Usuario ' + str(format_data(data)[2][0]) + ' - Película ' + str(dash_column[0]))
     print(colored(tabulate(correlations, headers=['Usuario', 'Correlación'], tablefmt='fancy_grid'),'blue'))
 
     if prediction == allowed_predictions[0]:
