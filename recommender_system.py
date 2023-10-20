@@ -2,7 +2,7 @@ import sys
 from tabulate import tabulate
 from termcolor import colored
 import copy
-from utilities import format_data, get_correlations, read_file, normalize_denormalize_and_round, restore_data
+from utilities import format_data, get_correlations, read_file, restore_data, normalize_data, denormalize_data
 from prediction import simple_prediction, mean_difference
 
 def display_help():
@@ -83,24 +83,28 @@ if __name__ == '__main__':
 
   # Se itera por cada usuario para predecir sus valoraciones y se almacenan el resultado en la matriz de valoraciones original
   for i in range(len(format_data(data)[1])):
-    formatted_data = format_data(data)[0]
+    formatted_data = normalize_data(format_data(data)[0], 0, 1)
     dash_column = format_data(data)[1]
     # Tabla que muestre las correlaciones de cada usuario con los demás
-    print('\nCorrelaciones - Usuario ' + str(format_data(data)[2][0] + 1) + ' - Película ' + str(dash_column[0] + 1) + '\n')
+    print(get_correlations(formatted_data, data, metric, num_neighbours))
+    print('\nCorrelaciones - Usuario ' + str(format_data(data)[2][0]) + ' - Película ' + str(dash_column[0]))
     print(colored(tabulate(get_correlations(formatted_data, data, metric, num_neighbours), headers=['Usuario', 'Correlación'], tablefmt='fancy_grid'),'blue'))
 
     if prediction == allowed_predictions[0]:
       simple_prediction(data, dash_column, get_correlations(formatted_data, data, metric, num_neighbours))
     elif prediction == allowed_predictions[1]:
-      mean_difference(data, formatted_data, dash_column, get_correlations(formatted_data, data, metric, num_neighbours))
+      print(mean_difference(data, formatted_data, dash_column, get_correlations(formatted_data, data, metric, num_neighbours)))
 
-  normalized_data = normalize_denormalize_and_round(data, 2, float(límite_inferior), float(límite_superior))
+  #values = restore_data(original_data, data, dash_row_original, dash_column_original, float(límite_inferior), float(límite_superior))
 
-  values = restore_data(original_data, normalized_data, dash_row_original, dash_column_original)
+  for row in data:
+     print(row)
+
+  denormalized_data = denormalize_data(data, float(límite_inferior), float(límite_superior))
 
   print('\nMatriz de valoraciones completa\n')
-  print(colored(tabulate(original_data, tablefmt='fancy_grid'),'green'))
+  print(colored(tabulate(denormalized_data, tablefmt='fancy_grid'),'green'))
 
-  print('\nPredicción de valoraciones\n')
-  print(colored(tabulate(values, headers=['Usuario', 'Pelicula', 'Valoración'], tablefmt='fancy_grid'),'yellow'))
+  #print('\nPredicción de valoraciones\n')
+  #print(colored(tabulate(denormalized_data, headers=['Usuario', 'Pelicula', 'Valoración'], tablefmt='fancy_grid'),'yellow'))
 
