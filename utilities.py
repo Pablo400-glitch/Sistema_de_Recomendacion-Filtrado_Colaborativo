@@ -21,27 +21,25 @@ def format_data(data):
 
   return [new_matrix, columns_to_remove, row_position]
 
-def get_correlations(data, original_matrix, metric, num_neighbors):
+def get_correlations(data, dash_row, metric, num_neighbors):
   correlations = []
   new_correlations = []
 
-  dash_row = find_dash(original_matrix)
-
   for i in range(len(data)):
-    if (dash_row == None):
+    if (dash_row[0] == None):
       break
 
-    if (dash_row == i):
+    if (dash_row[0] == i):
       continue
     else:
       if len(correlations) == num_neighbors:
         break
       if metric == 'Correlacion de Pearson':
-          correlations.append([int(i), pearson(np.array(data[dash_row]), np.array(data[i]))])
+          correlations.append([int(i), pearson(np.array(data[dash_row[0]]), np.array(data[i]))])
       elif metric == 'Distancia Coseno':
-          correlations.append([int(i), cosine_distance(np.array(data[dash_row]), np.array(data[i]))])
+          correlations.append([int(i), cosine_distance(np.array(data[dash_row[0]]), np.array(data[i]))])
       elif metric == 'Distancia Euclidea':
-        correlations.append([int(i), euclidean_distance(np.array(data[dash_row]), np.array(data[i]))])
+        correlations.append([int(i), euclidean_distance(np.array(data[dash_row[0]]), np.array(data[i]))])
 
   if metric == 'Correlacion de Pearson':
     for item in correlations:
@@ -58,12 +56,6 @@ def get_correlations(data, original_matrix, metric, num_neighbors):
 
   return new_correlations
 
-def find_dash(data):
-    for row, row_values in enumerate(data):
-        if "-" in row_values:
-            return row
-    return None
-
 # Normalizar la matriz al rango 0-1
 def normalize_data(data, new_min, new_max):
     min_original = np.min(data)
@@ -79,9 +71,9 @@ def denormalize_data(normalized_data, min_original, max_original):
     max_original = np.max(normalized_data)
     normalized_data = (normalized_data - min_original) / (max_original - min_original)
     # Escalamos los datos normalizados al nuevo rango [new_min, new_max]
-    normalized_data = normalized_data * (max_original - min_original) + min_original
+    denormalized_data = normalized_data * (max_original - min_original) + min_original
     
-    return normalized_data
+    return denormalized_data
 
 def read_file(file_name):
   límite_inferior = None
@@ -100,20 +92,11 @@ def read_file(file_name):
 
   return límite_inferior, límite_superior, data
 
-def normalize_denormalize_and_round(data, decimal_places, límite_inferior, límite_superior):
-  # Se normaliza y desnormaliza la matriz de valoraciones para que los valores estén entre los límites especificados
-  data = denormalize_data(normalize_data(data), límite_inferior, límite_superior)
-  for i in range(len(data)):
-      for j in range(len(data[i])):
-          data[i][j] = round(data[i][j], decimal_places)
-
-  return data
-
-def restore_data(original_data, normalized_data, dash_row_original, dash_column_original):
+def restore_data(original_data, normalized_data):
   values = []
-  for row in range(len(dash_row_original)):
-    for column in range(len(dash_column_original)):
-      if (original_data[dash_row_original[row]][dash_column_original[column]] == "-"):
-        values.append([dash_row_original[row] + 1, dash_column_original[column] + 1, normalized_data[dash_row_original[row]][dash_column_original[column]]])
+  for row in range(len(original_data)):
+    for column in range(len(original_data[row])):
+      if original_data[row][column] == "-":
+        values.append([row + 1, column + 1, normalized_data[row][column]])
   
-  return values, normalized_data
+  return values
