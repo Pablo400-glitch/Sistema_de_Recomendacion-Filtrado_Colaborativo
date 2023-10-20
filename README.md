@@ -1,4 +1,4 @@
-# Sistema de Recomendación
+# Sistema de Recomendación - Métodos de filtrado colaborativo
 
 Este es un sistema de recomendación que utiliza tres métricas diferentes y dos métodos de predicción para predecir las valoraciones de los usuarios. El sistema está diseñado para ayudar a los usuarios a encontrar recomendaciones basadas en sus preferencias y datos de entrada.
 
