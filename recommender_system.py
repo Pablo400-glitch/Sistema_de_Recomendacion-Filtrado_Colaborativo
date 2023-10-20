@@ -2,7 +2,7 @@ import sys
 from tabulate import tabulate
 from termcolor import colored
 import copy
-from utilities import format_data, get_correlations, read_file, restore_data, normalize_data, denormalize_data
+from utilities import format_data, get_correlations, read_file, users_rating, normalize_data, denormalize_data
 from prediction import simple_prediction, mean_difference
 
 def display_help():
@@ -95,7 +95,7 @@ if __name__ == '__main__':
 
   denormalized_data = denormalize_data(data, float(límite_inferior), float(límite_superior))
 
-  values = restore_data(original_data, denormalized_data)
+  values = users_rating(original_data, denormalized_data)
 
   print('\nMatriz de valoraciones incompleta\n')
   print(colored(tabulate(original_data, tablefmt='fancy_grid'),'yellow'))

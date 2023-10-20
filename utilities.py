@@ -92,7 +92,7 @@ def read_file(file_name):
 
   return límite_inferior, límite_superior, data
 
-def restore_data(original_data, normalized_data):
+def users_rating(original_data, normalized_data):
   values = []
   for row in range(len(original_data)):
     for column in range(len(original_data[row])):
