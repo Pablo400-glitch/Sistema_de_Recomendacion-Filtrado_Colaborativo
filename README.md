@@ -52,3 +52,7 @@ python recommender_system.py <nombre_archivo>.txt <tipo_métrica> <tipo_predicci
 
 4. ```<número_vecinos>```: El número de vecinos a considerar en el cálculo de las recomendaciones.
 
+## Ejemplo de Ejecución
+
+![Alt Text](./gif/Ejecución.gif)
+
