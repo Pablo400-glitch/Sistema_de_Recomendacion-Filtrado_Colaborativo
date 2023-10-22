@@ -31,6 +31,6 @@ def mean_difference(original_data, formatted_data, dash_column, dash_row, correl
   for corr in correlations:
     sum_denom += corr[1]
 
-  original_data[dash_row[0]][dash_column[0]] = round(np.mean(formatted_data[dash_row]) + (sum_num / sum_denom), 4);
+  original_data[dash_row[0]][dash_column[0]] = round(np.mean(formatted_data[dash_row[0]]) + (sum_num / sum_denom), 4);
 
   return original_data[dash_row[0]][dash_column[0]]
