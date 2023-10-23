@@ -66,12 +66,8 @@ def normalize_data(data, new_min, new_max):
     
     return normalized_data
 
-def denormalize_data(normalized_data, min_original, max_original):
-    min_original = np.min(normalized_data)
-    max_original = np.max(normalized_data)
-    normalized_data = (normalized_data - min_original) / (max_original - min_original)
-    # Escalamos los datos normalizados al nuevo rango [new_min, new_max]
-    denormalized_data = normalized_data * (max_original - min_original) + min_original
+def denormalize_data(normalized_data, new_min, new_max):
+    denormalized_data = np.clip(normalized_data, new_min, new_max)
     
     return denormalized_data
 
