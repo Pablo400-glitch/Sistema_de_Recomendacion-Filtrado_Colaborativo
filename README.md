@@ -37,7 +37,7 @@ Para ejecutar el sistema de recomendación, sigue estos pasos:
 2. Ejecuta el programa recommender_system.py con la siguiente manera con los argumentos pertinentes:
 
 ```shell
-python recommender_system.py <nombre_archivo>.txt <tipo_métrica> <tipo_predicción> <número_vecinos>
+python recommender_system.py -a <nombre_archivo>.txt -m <tipo_métrica> -p <tipo_predicción> -v <número_vecinos>
 ```
 
 3. La salida del sistema se mostrará en la consola y estará formateada como tablas con colores.
